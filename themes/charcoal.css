@@ -1,7 +1,7 @@
 /*
-Theme Name: Dark
+Theme Name: Charcoal
 Theme URI: https://github.com/abrayall/intermission
-Description: Sleek dark theme with subtle highlights
+Description: Sleek charcoal dark solid color
 Version: 1.0
 Author: Brayall, LLC
 Author URI: https://brayall.com
@@ -15,11 +15,12 @@ body {
 .intermission-logo {
     background: #2a2a2a;
     border-radius: 50%;
+    padding: 20px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
 }
 
 .intermission-logo svg {
-    color: #4CAF50;
+    color: #FFC107;
 }
 
 .intermission-headline {

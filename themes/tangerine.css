@@ -1,0 +1,61 @@
+/*
+Theme Name: Tangerine
+Theme URI: https://github.com/abrayall/intermission
+Description: Vibrant tangerine orange solid color
+Version: 1.0
+Author: Brayall, LLC
+Author URI: https://brayall.com
+*/
+
+body {
+    background: #ff8c00;
+    color: #2c1810;
+}
+
+.intermission-logo {
+    background: rgba(255, 255, 255, 0.4);
+    border-radius: 50%;
+    padding: 20px;
+}
+
+.intermission-logo svg {
+    color: #2c1810;
+}
+
+.intermission-headline {
+    color: #2c1810;
+    text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.5);
+}
+
+.intermission-message {
+    color: #2c1810;
+    opacity: 0.9;
+}
+
+.intermission-countdown-item {
+    background: rgba(255, 255, 255, 0.5);
+    backdrop-filter: blur(8px);
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.6);
+}
+
+.intermission-countdown-value {
+    color: #2c1810;
+}
+
+.intermission-countdown-label {
+    color: #2c1810;
+    opacity: 0.8;
+}
+
+.intermission-social-link {
+    background: rgba(255, 255, 255, 0.4);
+    color: #2c1810;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+}
+
+.intermission-social-link:hover {
+    background: rgba(255, 255, 255, 0.6);
+    transform: scale(1.1);
+}

@@ -51,3 +51,35 @@
     font-size: 14px;
     color: #333;
 }
+
+.intermission-tab-content {
+    background: #fff;
+    padding: 20px;
+    border: 1px solid #c3c4c7;
+    border-top: none;
+}
+
+.nav-tab-wrapper {
+    margin-bottom: 0;
+}
+
+.intermission-tab-content .form-table th {
+    padding-right: 10px;
+}
+
+#general .form-table th {
+    width: 70px;
+}
+
+#times .form-table th {
+    width: 40px;
+}
+
+#advanced .form-table th {
+    width: 100px;
+}
+
+.intermission-settings .intermission-mode-toggle {
+    padding-right: 10px;
+    padding-left: 3px;
+}

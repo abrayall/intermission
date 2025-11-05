@@ -1,14 +1,14 @@
 /*
-Theme Name: Purple Gradient
+Theme Name: Crimson
 Theme URI: https://github.com/abrayall/intermission
-Description: Purple gradient background with glassmorphism effects
+Description: Bold deep red solid theme
 Version: 1.0
 Author: Brayall, LLC
 Author URI: https://brayall.com
 */
 
 body {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: #b91c1c;
     color: #ffffff;
 }
 
@@ -16,18 +16,6 @@ body {
     background: rgba(255, 255, 255, 0.2);
     border-radius: 50%;
     padding: 20px;
-    animation: pulse 2s infinite;
-}
-
-@keyframes pulse {
-    0%, 100% {
-        transform: scale(1);
-        box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.7);
-    }
-    50% {
-        transform: scale(1.05);
-        box-shadow: 0 0 0 20px rgba(255, 255, 255, 0);
-    }
 }
 
 .intermission-logo svg {
@@ -36,19 +24,19 @@ body {
 
 .intermission-headline {
     color: #ffffff;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);
 }
 
 .intermission-message {
     color: #ffffff;
-    opacity: 0.9;
+    opacity: 0.95;
 }
 
 .intermission-countdown-item {
     background: rgba(255, 255, 255, 0.15);
-    backdrop-filter: blur(10px);
-    border-radius: 15px;
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(8px);
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.25);
 }
 
 .intermission-countdown-value {
@@ -57,18 +45,17 @@ body {
 
 .intermission-countdown-label {
     color: #ffffff;
-    opacity: 0.8;
+    opacity: 0.85;
 }
 
 .intermission-social-link {
     background: rgba(255, 255, 255, 0.15);
-    backdrop-filter: blur(5px);
-    border-radius: 50%;
     color: #ffffff;
+    border-radius: 50%;
     transition: all 0.3s ease;
 }
 
 .intermission-social-link:hover {
-    background: rgba(255, 255, 255, 0.25);
-    transform: translateY(-5px);
+    background: rgba(255, 255, 255, 0.3);
+    transform: scale(1.1);
 }

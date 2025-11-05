@@ -1,0 +1,63 @@
+/*
+Theme Name: Winter Wonderland
+Theme URI: https://github.com/abrayall/intermission
+Description: Snowy winter landscape with pine trees
+Version: 1.0
+Author: Brayall, LLC
+Author URI: https://brayall.com
+*/
+
+body {
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.3)),
+                url('images/winter-wonderland.webp') center/cover no-repeat fixed;
+    color: #ffffff;
+}
+
+.intermission-logo {
+    background: rgba(255, 255, 255, 0.25);
+    border-radius: 50%;
+    padding: 20px;
+}
+
+.intermission-logo svg {
+    color: #ffffff;
+}
+
+.intermission-headline {
+    color: #ffffff;
+    text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.6);
+}
+
+.intermission-message {
+    color: #ffffff;
+    opacity: 0.95;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.intermission-countdown-item {
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(10px);
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.intermission-countdown-value {
+    color: #ffffff;
+}
+
+.intermission-countdown-label {
+    color: #ffffff;
+    opacity: 0.85;
+}
+
+.intermission-social-link {
+    background: rgba(0, 0, 0, 0.3);
+    color: #ffffff;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+}
+
+.intermission-social-link:hover {
+    background: rgba(0, 0, 0, 0.5);
+    transform: scale(1.1);
+}

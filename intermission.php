@@ -73,8 +73,34 @@ class Intermission {
     }
 
     public function show_maintenance_page() {
+        $enable_gmt = get_option('intermission_auto_enable_gmt', 0);
+        if ($enable_gmt > 0) {
+            $current_gmt = time();
+            if ($current_gmt >= $enable_gmt) {
+                update_option('intermission_enabled', true);
+                delete_option('intermission_auto_enable_gmt');
+                delete_option('intermission_auto_enable_date');
+                delete_option('intermission_auto_enable_time');
+            }
+        }
+
         if (!get_option('intermission_enabled', false)) {
             return;
+        }
+
+        $auto_disable = get_option('intermission_auto_disable', false);
+        if ($auto_disable) {
+            $countdown_gmt = get_option('intermission_countdown_gmt', 0);
+            if ($countdown_gmt > 0) {
+                $current_gmt = time();
+                if ($current_gmt >= $countdown_gmt) {
+                    update_option('intermission_enabled', false);
+                    delete_option('intermission_countdown_gmt');
+                    delete_option('intermission_countdown_date');
+                    delete_option('intermission_countdown_time');
+                    return;
+                }
+            }
         }
 
         if (is_user_logged_in() && current_user_can('administrator')) {
@@ -140,6 +166,8 @@ class Intermission {
         register_setting('intermission_settings', 'intermission_theme');
         register_setting('intermission_settings', 'intermission_secret_key');
         register_setting('intermission_settings', 'intermission_whitelist_ips');
+        register_setting('intermission_settings', 'intermission_icon_type');
+        register_setting('intermission_settings', 'intermission_custom_icon_url');
     }
 
     public function get_available_themes() {
@@ -157,6 +185,16 @@ class Intermission {
             if ($theme_data) {
                 $themes[basename($theme_file, '.css')] = $theme_data;
             }
+        }
+
+        uasort($themes, function($a, $b) {
+            return strcmp($a['name'], $b['name']);
+        });
+
+        if (isset($themes['default'])) {
+            $default_theme = $themes['default'];
+            unset($themes['default']);
+            $themes = array('default' => $default_theme) + $themes;
         }
 
         return $themes;
@@ -182,10 +220,32 @@ class Intermission {
         return !empty($theme_data['name']) ? $theme_data : null;
     }
 
+    public function get_icon_html() {
+        $icon_type = get_option('intermission_icon_type', 'wrench');
+        $custom_icon_url = get_option('intermission_custom_icon_url', '');
+
+        if ($icon_type === 'custom' && !empty($custom_icon_url)) {
+            return '<img src="' . esc_url($custom_icon_url) . '" alt="Icon" style="width: 100%; height: 100%; object-fit: contain;">';
+        }
+
+        $icons = array(
+            'wrench' => '<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>',
+            'gear' => '<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 1v6m0 6v6m11-11h-6m-6 0H1m15.4-3.6l-4.2 4.2m-4.4 0L3.6 3.6m0 16.8l4.2-4.2m4.4 0l4.2 4.2"/></svg>',
+            'tools' => '<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/><path d="M8 17l5 5M17 8L8 17"/></svg>',
+            'clock' => '<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>',
+            'rocket' => '<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09zM12 15l-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"/></svg>',
+            'code' => '<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>',
+            'shield' => '<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>'
+        );
+
+        return isset($icons[$icon_type]) ? $icons[$icon_type] : $icons['wrench'];
+    }
+
     public function enqueue_admin_assets($hook) {
         if ($hook !== 'settings_page_intermission') {
             return;
         }
+        wp_enqueue_media();
         wp_enqueue_style('intermission-admin', INTERMISSION_PLUGIN_URL . 'assets/css/admin.css', array(), INTERMISSION_VERSION);
         wp_enqueue_script('intermission-admin', INTERMISSION_PLUGIN_URL . 'assets/js/admin.js', array('jquery'), INTERMISSION_VERSION, true);
         wp_localize_script('intermission-admin', 'context', array(
@@ -248,8 +308,7 @@ class Intermission {
             wp_send_json_error('Unauthorized');
         }
 
-        $current = get_option('intermission_enabled', false);
-        $new_value = !$current;
+        $new_value = isset($_POST['enabled']) ? ($_POST['enabled'] == '1') : !get_option('intermission_enabled', false);
         update_option('intermission_enabled', $new_value);
 
         wp_send_json_success(array(

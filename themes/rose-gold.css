@@ -1,0 +1,61 @@
+/*
+Theme Name: Rose Gold
+Theme URI: https://github.com/abrayall/intermission
+Description: Elegant rose gold metallic theme
+Version: 1.0
+Author: Brayall, LLC
+Author URI: https://brayall.com
+*/
+
+body {
+    background: linear-gradient(135deg, #e8b4b8 0%, #d4a5a5 50%, #c19a6b 100%);
+    color: #4a2c2a;
+}
+
+.intermission-logo {
+    background: rgba(255, 255, 255, 0.4);
+    border-radius: 50%;
+    padding: 20px;
+}
+
+.intermission-logo svg {
+    color: #4a2c2a;
+}
+
+.intermission-headline {
+    color: #4a2c2a;
+    text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.5);
+}
+
+.intermission-message {
+    color: #4a2c2a;
+    opacity: 0.9;
+}
+
+.intermission-countdown-item {
+    background: rgba(255, 255, 255, 0.45);
+    backdrop-filter: blur(8px);
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.6);
+}
+
+.intermission-countdown-value {
+    color: #4a2c2a;
+}
+
+.intermission-countdown-label {
+    color: #4a2c2a;
+    opacity: 0.8;
+}
+
+.intermission-social-link {
+    background: rgba(255, 255, 255, 0.4);
+    color: #4a2c2a;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+}
+
+.intermission-social-link:hover {
+    background: rgba(255, 255, 255, 0.6);
+    transform: scale(1.1);
+}

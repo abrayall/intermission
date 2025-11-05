@@ -1,4 +1,61 @@
 jQuery(document).ready(function($) {
+    function switchTab(tab) {
+        $('.nav-tab').removeClass('nav-tab-active');
+        $('.nav-tab[data-tab="' + tab + '"]').addClass('nav-tab-active');
+
+        $('.intermission-tab-content').hide();
+        $('#' + tab).show();
+    }
+
+    $('.nav-tab-wrapper .nav-tab').on('click', function(e) {
+        e.preventDefault();
+        var tab = $(this).data('tab');
+        window.location.hash = tab;
+        switchTab(tab);
+    });
+
+    var hash = window.location.hash.substring(1);
+    if (hash && $('#' + hash).length) {
+        switchTab(hash);
+    } else {
+        switchTab('general');
+    }
+
+    if (sessionStorage.getItem('intermission_scroll_position')) {
+        var scrollPos = sessionStorage.getItem('intermission_scroll_position');
+        sessionStorage.removeItem('intermission_scroll_position');
+        window.scrollTo(0, parseInt(scrollPos));
+    }
+
+    $('.intermission-settings form').on('submit', function(e) {
+        sessionStorage.setItem('intermission_scroll_position', window.pageYOffset);
+
+        var enableDate = $('#intermission_auto_enable_date').val();
+        var enableTime = $('#intermission_auto_enable_time').val();
+        if (enableDate && enableTime) {
+            var localEnableDate = new Date(enableDate + 'T' + enableTime);
+            var enableGmtTimestamp = Math.floor(localEnableDate.getTime() / 1000);
+            $('#intermission_auto_enable_gmt').val(enableGmtTimestamp);
+        } else {
+            $('#intermission_auto_enable_gmt').val('');
+        }
+
+        var disableDate = $('#intermission_countdown_date').val();
+        var disableTime = $('#intermission_countdown_time').val();
+        if (disableDate && disableTime) {
+            var localDisableDate = new Date(disableDate + 'T' + disableTime);
+            var disableGmtTimestamp = Math.floor(localDisableDate.getTime() / 1000);
+            $('#intermission_countdown_gmt').val(disableGmtTimestamp);
+        } else {
+            $('#intermission_countdown_gmt').val('');
+        }
+
+        var currentHash = window.location.hash;
+        if (currentHash) {
+            $(this).attr('action', currentHash);
+        }
+    });
+
     $('#intermission_enabled').on('change', function() {
         var $toggle = $('.intermission-toggle-switch');
         var $label = $('.intermission-mode-label');
@@ -17,14 +74,16 @@ jQuery(document).ready(function($) {
             type: 'POST',
             data: {
                 action: 'intermission_toggle',
-                nonce: context.nonce
+                nonce: context.nonce,
+                enabled: isChecked ? 1 : 0
             },
             success: function(response) {
                 if (response.success) {
                     var modeText = response.data.enabled ? 'Maintenance' : 'Live';
+                    var noticeClass = response.data.enabled ? 'notice-warning' : 'notice-success';
                     $('.intermission-settings .notice').remove();
                     $('.intermission-settings h1').after(
-                        '<div class="notice notice-success is-dismissible"><p>The site is now in ' + modeText + ' mode!</p></div>'
+                        '<div class="notice ' + noticeClass + ' is-dismissible"><p>The site is now in ' + modeText + ' mode!</p></div>'
                     );
 
                     var $adminBarDot = $('#wp-admin-bar-intermission-toggle .intermission-status-dot');
@@ -87,4 +146,55 @@ jQuery(document).ready(function($) {
             }
         });
     }
+
+    var $iconSelect = $('#intermission_icon_type');
+    var $customIconUpload = $('#intermission-custom-icon-upload');
+
+    if ($iconSelect.length && $customIconUpload.length) {
+        $iconSelect.on('change', function() {
+            if ($(this).val() === 'custom') {
+                $customIconUpload.slideDown();
+            } else {
+                $customIconUpload.slideUp();
+            }
+        });
+    }
+
+    var mediaUploader;
+
+    $('#intermission_upload_icon_button').on('click', function(e) {
+        e.preventDefault();
+
+        if (mediaUploader) {
+            mediaUploader.open();
+            return;
+        }
+
+        mediaUploader = wp.media({
+            title: 'Select Custom Icon',
+            button: {
+                text: 'Use this image'
+            },
+            multiple: false,
+            library: {
+                type: 'image'
+            }
+        });
+
+        mediaUploader.on('select', function() {
+            var attachment = mediaUploader.state().get('selection').first().toJSON();
+            $('#intermission_custom_icon_url').val(attachment.url);
+            $('#intermission_custom_icon_preview').html('<img src="' + attachment.url + '" style="max-width: 100px; max-height: 100px; border-radius: 8px;">').show();
+            $('#intermission_remove_icon_button').show();
+        });
+
+        mediaUploader.open();
+    });
+
+    $('#intermission_remove_icon_button').on('click', function(e) {
+        e.preventDefault();
+        $('#intermission_custom_icon_url').val('');
+        $('#intermission_custom_icon_preview').hide();
+        $(this).hide();
+    });
 });
