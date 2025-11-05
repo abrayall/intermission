@@ -1,0 +1,61 @@
+/*
+Theme Name: Magenta
+Theme URI: https://github.com/abrayall/intermission
+Description: Bold magenta pink solid color
+Version: 1.0
+Author: Brayall, LLC
+Author URI: https://brayall.com
+*/
+
+body {
+    background: #ff00ff;
+    color: #4a0a4a;
+}
+
+.intermission-logo {
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    padding: 20px;
+}
+
+.intermission-logo svg {
+    color: #4a0a4a;
+}
+
+.intermission-headline {
+    color: #4a0a4a;
+    text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.6);
+}
+
+.intermission-message {
+    color: #4a0a4a;
+    opacity: 0.9;
+}
+
+.intermission-countdown-item {
+    background: rgba(255, 255, 255, 0.4);
+    backdrop-filter: blur(8px);
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+.intermission-countdown-value {
+    color: #4a0a4a;
+}
+
+.intermission-countdown-label {
+    color: #4a0a4a;
+    opacity: 0.8;
+}
+
+.intermission-social-link {
+    background: rgba(255, 255, 255, 0.3);
+    color: #4a0a4a;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+}
+
+.intermission-social-link:hover {
+    background: rgba(255, 255, 255, 0.5);
+    transform: scale(1.1);
+}

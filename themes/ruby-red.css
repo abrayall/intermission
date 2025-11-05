@@ -1,20 +1,21 @@
 /*
-Theme Name: Ocean
+Theme Name: Ruby Red
 Theme URI: https://github.com/abrayall/intermission
-Description: Calming ocean blue gradient theme
+Description: Deep ruby red solid color
 Version: 1.0
 Author: Brayall, LLC
 Author URI: https://brayall.com
 */
 
 body {
-    background: linear-gradient(135deg, #2193b0 0%, #6dd5ed 100%);
+    background: #9b111e;
     color: #ffffff;
 }
 
 .intermission-logo {
     background: rgba(255, 255, 255, 0.25);
     border-radius: 50%;
+    padding: 20px;
 }
 
 .intermission-logo svg {
@@ -23,11 +24,11 @@ body {
 
 .intermission-headline {
     color: #ffffff;
-    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 .intermission-message {
-    color: #ffffff;
+    color: #f0f0f0;
     opacity: 0.95;
 }
 

@@ -1,0 +1,61 @@
+/*
+Theme Name: Olive Green
+Theme URI: https://github.com/abrayall/intermission
+Description: Earthy olive green solid color
+Version: 1.0
+Author: Brayall, LLC
+Author URI: https://brayall.com
+*/
+
+body {
+    background: #556b2f;
+    color: #ffffff;
+}
+
+.intermission-logo {
+    background: rgba(255, 255, 255, 0.25);
+    border-radius: 50%;
+    padding: 20px;
+}
+
+.intermission-logo svg {
+    color: #ffffff;
+}
+
+.intermission-headline {
+    color: #ffffff;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.intermission-message {
+    color: #f0f8f0;
+    opacity: 0.95;
+}
+
+.intermission-countdown-item {
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(8px);
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.intermission-countdown-value {
+    color: #ffffff;
+}
+
+.intermission-countdown-label {
+    color: #ffffff;
+    opacity: 0.85;
+}
+
+.intermission-social-link {
+    background: rgba(255, 255, 255, 0.2);
+    color: #ffffff;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+}
+
+.intermission-social-link:hover {
+    background: rgba(255, 255, 255, 0.35);
+    transform: scale(1.1);
+}
