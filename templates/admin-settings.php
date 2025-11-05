@@ -58,15 +58,16 @@ $available_themes = $intermission->get_available_themes();
             <tr>
                 <th scope="row">Theme</th>
                 <td>
-                    <select name="intermission_theme" class="regular-text">
+                    <select name="intermission_theme" id="intermission_theme" class="regular-text">
                         <?php foreach ($available_themes as $theme_slug => $theme_data): ?>
-                            <option value="<?php echo esc_attr($theme_slug); ?>" <?php selected($selected_theme, $theme_slug); ?>>
+                            <option value="<?php echo esc_attr($theme_slug); ?>" data-description="<?php echo esc_attr($theme_data['description']); ?>" <?php selected($selected_theme, $theme_slug); ?>>
                                 <?php echo esc_html($theme_data['name']); ?>
                             </option>
                         <?php endforeach; ?>
                     </select>
+                    <a href="<?php echo esc_url(home_url('/intermission?theme=' . $selected_theme)); ?>" target="_blank" id="intermission-theme-preview" style="display: none; margin-left: 8px;">Preview</a>
                     <?php if (isset($available_themes[$selected_theme])): ?>
-                        <p class="description">
+                        <p class="description" id="intermission-theme-description">
                             <?php echo esc_html($available_themes[$selected_theme]['description']); ?>
                         </p>
                     <?php endif; ?>
@@ -119,7 +120,7 @@ $available_themes = $intermission->get_available_themes();
 
         <p class="submit">
             <?php submit_button('Save', 'primary', 'submit', false); ?>
-            <a href="<?php echo esc_url(home_url('/')); ?>" target="_blank" class="button">Preview</a>
+            <a href="<?php echo esc_url(home_url('/intermission')); ?>" target="_blank" class="button" id="intermission-preview-button">Preview</a>
         </p>
     </form>
 </div>
