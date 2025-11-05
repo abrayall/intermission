@@ -45,6 +45,8 @@ class Intermission {
     }
 
     private function __construct() {
+        add_action('init', array($this, 'register_preview_endpoint'));
+        add_action('template_redirect', array($this, 'handle_preview_endpoint'), 0);
         add_action('template_redirect', array($this, 'show_maintenance_page'), 1);
         add_action('admin_menu', array($this, 'add_admin_menu'));
         add_action('admin_init', array($this, 'register_settings'));
@@ -53,6 +55,21 @@ class Intermission {
         add_action('wp_enqueue_scripts', array($this, 'enqueue_toolbar_assets'));
         add_action('admin_enqueue_scripts', array($this, 'enqueue_toolbar_assets'));
         add_action('wp_ajax_intermission_toggle', array($this, 'ajax_toggle_maintenance'));
+        add_filter('plugin_action_links_' . plugin_basename(__FILE__), array($this, 'add_plugin_action_links'));
+    }
+
+    public function register_preview_endpoint() {
+        add_rewrite_rule('^intermission/?$', 'index.php?intermission_preview=1', 'top');
+        add_rewrite_tag('%intermission_preview%', '([^&]+)');
+    }
+
+    public function handle_preview_endpoint() {
+        if (get_query_var('intermission_preview')) {
+            header('X-Robots-Tag: noindex, nofollow', true);
+            nocache_headers();
+            include INTERMISSION_PLUGIN_DIR . 'templates/maintenance.php';
+            exit;
+        }
     }
 
     public function show_maintenance_page() {
@@ -101,11 +118,17 @@ class Intermission {
     public function add_admin_menu() {
         add_options_page(
             'Intermission Settings',
-            'Intermission',
+            'Maintenance Mode',
             'manage_options',
             'intermission',
             array($this, 'render_settings_page')
         );
+    }
+
+    public function add_plugin_action_links($links) {
+        $settings_link = '<a href="' . admin_url('options-general.php?page=intermission') . '">Settings</a>';
+        array_unshift($links, $settings_link);
+        return $links;
     }
 
     public function register_settings() {
@@ -164,6 +187,11 @@ class Intermission {
             return;
         }
         wp_enqueue_style('intermission-admin', INTERMISSION_PLUGIN_URL . 'assets/css/admin.css', array(), INTERMISSION_VERSION);
+        wp_enqueue_script('intermission-admin', INTERMISSION_PLUGIN_URL . 'assets/js/admin.js', array('jquery'), INTERMISSION_VERSION, true);
+        wp_localize_script('intermission-admin', 'context', array(
+            'ajaxurl' => admin_url('admin-ajax.php'),
+            'nonce' => wp_create_nonce('intermission_toggle_nonce')
+        ));
     }
 
     public function render_settings_page() {
@@ -230,5 +258,12 @@ class Intermission {
         ));
     }
 }
+
+function intermission_activation() {
+    Intermission::get_instance()->register_preview_endpoint();
+    flush_rewrite_rules();
+}
+
+register_activation_hook(__FILE__, 'intermission_activation');
 
 Intermission::get_instance();

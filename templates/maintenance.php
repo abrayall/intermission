@@ -7,6 +7,17 @@
     <link rel="stylesheet" href="<?php echo esc_url(plugin_dir_url(dirname(__FILE__)) . 'assets/css/intermission.css'); ?>">
     <?php
     $selected_theme = get_option('intermission_theme', 'default');
+
+    if (isset($_GET['theme'])) {
+        $preview_theme = sanitize_text_field($_GET['theme']);
+        $intermission = Intermission::get_instance();
+        $available_themes = $intermission->get_available_themes();
+
+        if (isset($available_themes[$preview_theme])) {
+            $selected_theme = $preview_theme;
+        }
+    }
+
     $theme_url = plugin_dir_url(dirname(__FILE__)) . 'themes/' . $selected_theme . '.css';
     ?>
     <link rel="stylesheet" href="<?php echo esc_url($theme_url); ?>">
@@ -22,7 +33,7 @@
         <h1 class="intermission-headline"><?php echo esc_html(get_option('intermission_headline', 'Under Maintenance')); ?></h1>
 
         <p class="intermission-message">
-            <?php echo wp_kses_post(get_option('intermission_message', 'We are currently performing scheduled maintenance. We will be back shortly!')); ?>
+            <?php echo wp_kses_post(nl2br(get_option('intermission_message', 'We are currently performing scheduled maintenance. We will be back shortly!'))); ?>
         </p>
 
         <?php
