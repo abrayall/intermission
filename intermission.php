@@ -158,16 +158,110 @@ class Intermission {
     }
 
     public function register_settings() {
-        register_setting('intermission_settings', 'intermission_enabled');
-        register_setting('intermission_settings', 'intermission_headline');
-        register_setting('intermission_settings', 'intermission_message');
-        register_setting('intermission_settings', 'intermission_countdown_date');
-        register_setting('intermission_settings', 'intermission_countdown_time');
-        register_setting('intermission_settings', 'intermission_theme');
-        register_setting('intermission_settings', 'intermission_secret_key');
-        register_setting('intermission_settings', 'intermission_whitelist_ips');
-        register_setting('intermission_settings', 'intermission_icon_type');
-        register_setting('intermission_settings', 'intermission_custom_icon_url');
+        register_setting('intermission_settings', 'intermission_enabled', array(
+            'type' => 'boolean',
+            'sanitize_callback' => array($this, 'sanitize_boolean')
+        ));
+        register_setting('intermission_settings', 'intermission_headline', array(
+            'type' => 'string',
+            'sanitize_callback' => 'sanitize_text_field'
+        ));
+        register_setting('intermission_settings', 'intermission_message', array(
+            'type' => 'string',
+            'sanitize_callback' => 'wp_kses_post'
+        ));
+        register_setting('intermission_settings', 'intermission_countdown_date', array(
+            'type' => 'string',
+            'sanitize_callback' => 'sanitize_text_field'
+        ));
+        register_setting('intermission_settings', 'intermission_countdown_time', array(
+            'type' => 'string',
+            'sanitize_callback' => 'sanitize_text_field'
+        ));
+        register_setting('intermission_settings', 'intermission_countdown_gmt', array(
+            'type' => 'integer',
+            'sanitize_callback' => 'absint'
+        ));
+        register_setting('intermission_settings', 'intermission_auto_enable_date', array(
+            'type' => 'string',
+            'sanitize_callback' => 'sanitize_text_field'
+        ));
+        register_setting('intermission_settings', 'intermission_auto_enable_time', array(
+            'type' => 'string',
+            'sanitize_callback' => 'sanitize_text_field'
+        ));
+        register_setting('intermission_settings', 'intermission_auto_enable_gmt', array(
+            'type' => 'integer',
+            'sanitize_callback' => 'absint'
+        ));
+        register_setting('intermission_settings', 'intermission_auto_disable', array(
+            'type' => 'boolean',
+            'sanitize_callback' => array($this, 'sanitize_boolean')
+        ));
+        register_setting('intermission_settings', 'intermission_theme', array(
+            'type' => 'string',
+            'sanitize_callback' => 'sanitize_text_field'
+        ));
+        register_setting('intermission_settings', 'intermission_secret_key', array(
+            'type' => 'string',
+            'sanitize_callback' => 'sanitize_text_field'
+        ));
+        register_setting('intermission_settings', 'intermission_whitelist_ips', array(
+            'type' => 'string',
+            'sanitize_callback' => 'sanitize_textarea_field'
+        ));
+        register_setting('intermission_settings', 'intermission_icon_type', array(
+            'type' => 'string',
+            'sanitize_callback' => 'sanitize_text_field'
+        ));
+        register_setting('intermission_settings', 'intermission_custom_icon_url', array(
+            'type' => 'string',
+            'sanitize_callback' => 'esc_url_raw'
+        ));
+        register_setting('intermission_settings', 'intermission_social_facebook', array(
+            'type' => 'string',
+            'sanitize_callback' => 'esc_url_raw'
+        ));
+        register_setting('intermission_settings', 'intermission_social_instagram', array(
+            'type' => 'string',
+            'sanitize_callback' => 'esc_url_raw'
+        ));
+        register_setting('intermission_settings', 'intermission_social_x', array(
+            'type' => 'string',
+            'sanitize_callback' => 'esc_url_raw'
+        ));
+        register_setting('intermission_settings', 'intermission_social_tiktok', array(
+            'type' => 'string',
+            'sanitize_callback' => 'esc_url_raw'
+        ));
+        register_setting('intermission_settings', 'intermission_social_youtube', array(
+            'type' => 'string',
+            'sanitize_callback' => 'esc_url_raw'
+        ));
+        register_setting('intermission_settings', 'intermission_social_linkedin', array(
+            'type' => 'string',
+            'sanitize_callback' => 'esc_url_raw'
+        ));
+        register_setting('intermission_settings', 'intermission_social_snapchat', array(
+            'type' => 'string',
+            'sanitize_callback' => 'esc_url_raw'
+        ));
+        register_setting('intermission_settings', 'intermission_social_pinterest', array(
+            'type' => 'string',
+            'sanitize_callback' => 'esc_url_raw'
+        ));
+        register_setting('intermission_settings', 'intermission_social_reddit', array(
+            'type' => 'string',
+            'sanitize_callback' => 'esc_url_raw'
+        ));
+        register_setting('intermission_settings', 'intermission_social_github', array(
+            'type' => 'string',
+            'sanitize_callback' => 'esc_url_raw'
+        ));
+    }
+
+    public function sanitize_boolean($value) {
+        return !empty($value) ? true : false;
     }
 
     public function get_available_themes() {
