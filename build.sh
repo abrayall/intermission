@@ -94,6 +94,11 @@ if [ -f "README.md" ]; then
     cp README.md "$PLUGIN_DIR/"
 fi
 
+# Copy readme.txt if it exists
+if [ -f "readme.txt" ]; then
+    cp readme.txt "$PLUGIN_DIR/"
+fi
+
 # Update version in plugin header (only the first occurrence)
 sed -i.bak "1,/\* Version:/ s/\* Version: .*/\* Version: ${VERSION}/" "$PLUGIN_DIR/intermission.php"
 rm -f "$PLUGIN_DIR/intermission.php.bak"
