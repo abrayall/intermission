@@ -1,0 +1,36 @@
+#wp-admin-bar-intermission-toggle .ab-item {
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    padding: 0 12px !important;
+    cursor: pointer !important;
+}
+
+#wp-admin-bar-intermission-toggle .intermission-status-dot {
+    display: inline-block !important;
+    width: 10px !important;
+    height: 10px !important;
+    border-radius: 50% !important;
+    transition: all 0.3s ease !important;
+    flex-shrink: 0 !important;
+}
+
+#wp-admin-bar-intermission-toggle .intermission-status-dot.live {
+    background-color: #46b450 !important;
+    box-shadow: 0 0 8px rgba(70, 180, 80, 0.6) !important;
+}
+
+#wp-admin-bar-intermission-toggle .intermission-status-dot.maintenance {
+    background-color: #ffb900 !important;
+    box-shadow: 0 0 8px rgba(255, 185, 0, 0.6) !important;
+}
+
+#wp-admin-bar-intermission-toggle .intermission-label {
+    font-size: 13px !important;
+    color: #eee !important;
+    white-space: nowrap !important;
+}
+
+#wp-admin-bar-intermission-toggle:hover .ab-item {
+    background-color: rgba(255, 255, 255, 0.05) !important;
+}
