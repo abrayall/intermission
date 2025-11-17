@@ -83,3 +83,9 @@
     padding-right: 10px;
     padding-left: 3px;
 }
+
+#general .form-table td p.description {
+    display: block;
+    margin-top: 8px;
+    margin-bottom: 0;
+}

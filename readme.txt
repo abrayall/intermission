@@ -1,9 +1,9 @@
 === Intermission ===
-Contributors: brayall
+Contributors: abrayall
 Tags: maintenance mode, coming soon, under construction, landing page, countdown
 Requires at least: 5.8
 Tested up to: 6.8
-Stable tag: 0.3.2
+Stable tag: 0.4.0
 Requires PHP: 7.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -95,6 +95,11 @@ The timestamp is automatically cleared from the database to prevent conflicts if
 8. Countdown timer display
 
 == Changelog ==
+
+= 0.4.0 =
+* Use wp_enqueue for CSS and JavaScript assets
+* Add direct file access protection to templates
+* Fix contributor username to match WordPress.org account
 
 = 0.3.1 =
 * Update README with accurate documentation

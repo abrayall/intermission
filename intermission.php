@@ -3,7 +3,7 @@
  * Plugin Name: Intermission
  * Plugin URI: https://github.com/abrayall/intermission
  * Description: Sophisticated maintenance mode with beautiful templates
- * Version: 0.3.1
+ * Version: 0.4.0
  * Author: Brayall, LLC
  * Author URI: https://brayall.com
  * License: GPL v2 or later

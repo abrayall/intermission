@@ -1,26 +1,35 @@
+<?php
+if (!defined('ABSPATH')) {
+    exit;
+}
+
+$selected_theme = get_option('intermission_theme', 'default');
+
+if (isset($_GET['theme'])) {
+    $preview_theme = sanitize_text_field($_GET['theme']);
+    $intermission = Intermission::get_instance();
+    $available_themes = $intermission->get_available_themes();
+
+    if (isset($available_themes[$preview_theme])) {
+        $selected_theme = $preview_theme;
+    }
+}
+
+wp_enqueue_style('intermission-base', plugin_dir_url(dirname(__FILE__)) . 'assets/css/intermission.css', array(), INTERMISSION_VERSION);
+wp_enqueue_style('intermission-theme', plugin_dir_url(dirname(__FILE__)) . 'themes/' . $selected_theme . '.css', array('intermission-base'), INTERMISSION_VERSION);
+
+$countdown_gmt = get_option('intermission_countdown_gmt', 0);
+if ($countdown_gmt > 0) {
+    wp_enqueue_script('intermission-countdown', plugin_dir_url(dirname(__FILE__)) . 'assets/js/intermission.js', array(), INTERMISSION_VERSION, true);
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php echo esc_html(get_option('intermission_headline', 'Under Maintenance')); ?></title>
-    <link rel="stylesheet" href="<?php echo esc_url(plugin_dir_url(dirname(__FILE__)) . 'assets/css/intermission.css'); ?>">
-    <?php
-    $selected_theme = get_option('intermission_theme', 'default');
-
-    if (isset($_GET['theme'])) {
-        $preview_theme = sanitize_text_field($_GET['theme']);
-        $intermission = Intermission::get_instance();
-        $available_themes = $intermission->get_available_themes();
-
-        if (isset($available_themes[$preview_theme])) {
-            $selected_theme = $preview_theme;
-        }
-    }
-
-    $theme_url = plugin_dir_url(dirname(__FILE__)) . 'themes/' . $selected_theme . '.css';
-    ?>
-    <link rel="stylesheet" href="<?php echo esc_url($theme_url); ?>">
+    <?php wp_head(); ?>
 </head>
 <body>
     <div class="intermission-container">
@@ -41,7 +50,7 @@
         $countdown_gmt = get_option('intermission_countdown_gmt', 0);
         if ($countdown_gmt > 0) {
             ?>
-            <div class="intermission-countdown" id="countdown" data-target="<?php echo esc_attr($countdown_gmt); ?>">
+            <div class="intermission-countdown" id="countdown" data-target="<?php echo esc_attr($countdown_gmt); ?>" data-autodisable="<?php echo esc_attr(get_option('intermission_auto_disable', false) ? 'true' : 'false'); ?>" data-homeurl="<?php echo esc_url(home_url('/')); ?>">
                 <div class="intermission-countdown-item">
                     <span class="intermission-countdown-value" id="days">00</span>
                     <span class="intermission-countdown-label">Days</span>
@@ -159,46 +168,6 @@
         <?php endif; ?>
     </div>
 
-    <script>
-        function updateCountdown() {
-            const countdown = document.getElementById('countdown');
-            if (!countdown) return;
-
-            const targetDate = parseInt(countdown.dataset.target) * 1000;
-            const autoDisable = <?php echo get_option('intermission_auto_disable', false) ? 'true' : 'false'; ?>;
-
-            function update() {
-                const now = new Date().getTime();
-                const distance = targetDate - now;
-
-                if (distance < 0) {
-                    if (autoDisable) {
-                        countdown.innerHTML = '<p class="intermission-message">Launching now! Redirecting...</p>';
-                        setTimeout(function() {
-                            window.location.href = '<?php echo esc_url(home_url('/')); ?>';
-                        }, 2000);
-                    } else {
-                        countdown.innerHTML = '<p class="intermission-message">We are launching now!</p>';
-                    }
-                    return;
-                }
-
-                const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-                document.getElementById('days').textContent = String(days).padStart(2, '0');
-                document.getElementById('hours').textContent = String(hours).padStart(2, '0');
-                document.getElementById('minutes').textContent = String(minutes).padStart(2, '0');
-                document.getElementById('seconds').textContent = String(seconds).padStart(2, '0');
-            }
-
-            update();
-            setInterval(update, 1000);
-        }
-
-        updateCountdown();
-    </script>
+    <?php wp_footer(); ?>
 </body>
 </html>
