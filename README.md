@@ -143,7 +143,15 @@ body {
 - WordPress 5.8+
 - PHP 7.4+
 
-## Version Management
+## Building
+
+Build using [wordsmith](https://github.com/abrayall/wordsmith):
+
+```bash
+wordsmith build
+```
+
+This creates a ZIP file in `build/` ready for upload to WordPress.
 
 Versions are managed using git tags in the format `v{major}.{minor}.{maintenance}`. The build system automatically generates version information from tags.
 

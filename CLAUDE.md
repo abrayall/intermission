@@ -31,8 +31,7 @@ intermission/
 │   ├── purple-gradient.css    # Purple gradient theme
 │   ├── dark.css               # Dark theme
 │   └── ocean.css              # Ocean blue theme
-├── build.sh                   # Unix build script
-├── build.bat                  # Windows build script
+├── plugin.properties          # Build configuration for wordsmith
 ├── README.md                  # User documentation
 └── CLAUDE.md                  # This file
 ```
@@ -78,6 +77,42 @@ The plugin adds a toggle to the WordPress admin bar (priority 35) that:
 
 ## Build System
 
+This plugin uses [wordsmith](https://github.com/abrayall/wordsmith) for building.
+
+### Building
+
+```bash
+wordsmith build
+```
+
+This creates `build/intermission-{version}.zip` ready for upload to WordPress.
+
+### Deploying to Local WordPress
+
+Start a local WordPress environment:
+
+```bash
+wordsmith wordpress start
+```
+
+Build and deploy to the running WordPress:
+
+```bash
+wordsmith deploy
+```
+
+Watch for changes and auto-deploy:
+
+```bash
+wordsmith watch deploy
+```
+
+Stop the WordPress environment:
+
+```bash
+wordsmith wordpress stop
+```
+
 ### Version Management
 
 Versions are managed using **git tags** in the format `v{major}.{minor}.{maintenance}`.
@@ -86,18 +121,6 @@ Versions are managed using **git tags** in the format `v{major}.{minor}.{mainten
 - `0.1.0` - Clean release at tag `v0.1.0`
 - `0.1.0-2` - 2 commits after tag
 - `0.1.0-2-11050950` - 2 commits after tag + local changes (timestamp: Nov 5, 09:50)
-
-### Build Scripts
-
-**Unix/Linux/Mac:**
-```bash
-./build.sh
-```
-
-**Windows:**
-```cmd
-build.bat
-```
 
 ### How Versioning Works
 
@@ -108,9 +131,30 @@ build.bat
 5. Updates plugin header version in built ZIP
 6. Includes `version.properties` in plugin package
 
+### plugin.properties
+
+Build configuration file:
+
+```properties
+name=Intermission
+description=Sophisticated maintenance mode with beautiful templates
+
+author=Brayall, LLC
+author-uri=https://brayall.com
+plugin-uri=https://github.com/abrayall/intermission
+license=GPL v2 or later
+license-uri=http://www.gnu.org/licenses/gpl-2.0.html
+
+main=intermission.php
+include=assets,templates,themes,readme.txt,README.md
+text-domain=intermission
+
+requires=5.8
+requires-php=7.4
+```
+
 **Output:**
 - `build/intermission-{version}.zip`
-- `build/version.properties`
 
 ### Version Reading
 
@@ -171,7 +215,7 @@ Remove color picker customization
 2. Create version tag: `git tag v0.1.1`
 3. Push commits: `git push origin main`
 4. Push tag: `git push origin v0.1.1`
-5. Build release: `./build.sh`
+5. Build release: `wordsmith build`
 6. Upload ZIP to WordPress or GitHub releases
 
 ## Development Guidelines
@@ -189,14 +233,14 @@ Remove color picker customization
 Test on local WordPress installation before committing:
 
 ```bash
-# Build plugin
-./build.sh
+# Start local WordPress
+wordsmith wordpress start
 
-# Extract to test location
-cd build
-unzip -q -o intermission-0.1.0.zip
+# Build and deploy
+wordsmith deploy
 
-# Test in WordPress at /wp-content/plugins/intermission/
+# Or watch for changes and auto-deploy
+wordsmith watch deploy
 ```
 
 ### Security Considerations

@@ -46,6 +46,7 @@ class Intermission {
 
     private function __construct() {
         add_action('init', array($this, 'register_preview_endpoint'));
+        add_action('parse_request', array($this, 'handle_preview_request'), 0);
         add_action('template_redirect', array($this, 'handle_preview_endpoint'), 0);
         add_action('template_redirect', array($this, 'show_maintenance_page'), 1);
         add_action('admin_menu', array($this, 'add_admin_menu'));
@@ -61,6 +62,23 @@ class Intermission {
     public function register_preview_endpoint() {
         add_rewrite_rule('^intermission/?$', 'index.php?intermission_preview=1', 'top');
         add_rewrite_tag('%intermission_preview%', '([^&]+)');
+
+        if (get_option('intermission_flush_rewrite_rules', false)) {
+            flush_rewrite_rules();
+            delete_option('intermission_flush_rewrite_rules');
+        }
+    }
+
+    public function handle_preview_request($wp) {
+        $request_uri = trim($_SERVER['REQUEST_URI'], '/');
+        $request_uri = strtok($request_uri, '?');
+
+        if ($request_uri === 'intermission') {
+            header('X-Robots-Tag: noindex, nofollow', true);
+            nocache_headers();
+            include INTERMISSION_PLUGIN_DIR . 'templates/maintenance.php';
+            exit;
+        }
     }
 
     public function handle_preview_endpoint() {
@@ -413,10 +431,26 @@ class Intermission {
 }
 
 function intermission_activation() {
-    Intermission::get_instance()->register_preview_endpoint();
-    flush_rewrite_rules();
+    update_option('intermission_flush_rewrite_rules', true);
 }
 
 register_activation_hook(__FILE__, 'intermission_activation');
+
+function intermission_check_version() {
+    $installed_version = get_option('intermission_version', '');
+    if ($installed_version !== INTERMISSION_VERSION) {
+        update_option('intermission_version', INTERMISSION_VERSION);
+        update_option('intermission_flush_rewrite_rules', true);
+    }
+}
+add_action('plugins_loaded', 'intermission_check_version');
+
+function intermission_flush_rules() {
+    $rules = get_option('rewrite_rules');
+    if (!isset($rules['^intermission/?$'])) {
+        flush_rewrite_rules();
+    }
+}
+add_action('wp_loaded', 'intermission_flush_rules');
 
 Intermission::get_instance();
