@@ -138,7 +138,9 @@ jQuery(document).ready(function($) {
             }
 
             if (selectedTheme !== initialTheme) {
-                var previewUrl = window.location.origin + '/intermission?theme=' + encodeURIComponent(selectedTheme);
+                var baseUrl = context.previewUrl || (window.location.origin + '/intermission');
+                var separator = baseUrl.indexOf('?') !== -1 ? '&' : '?';
+                var previewUrl = baseUrl + separator + 'theme=' + encodeURIComponent(selectedTheme);
                 $themePreview.attr('href', previewUrl);
                 $themePreview.show();
             } else {
